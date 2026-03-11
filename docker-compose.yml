@@ -1,0 +1,22 @@
+version: "3.9"
+
+services:
+  vsafe:
+    build: .
+    container_name: vsafe
+    restart: unless-stopped
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./data:/app/data
+    environment:
+      - VSAFE_API_KEY=${VSAFE_API_KEY:-}
+    shm_size: "1g"
+    # For GPU support, uncomment the following:
+    # deploy:
+    #   resources:
+    #     reservations:
+    #       devices:
+    #         - driver: nvidia
+    #           count: 1
+    #           capabilities: [gpu]

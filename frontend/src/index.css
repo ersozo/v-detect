@@ -1,0 +1,297 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ============================================
+   Theme Variables
+   ============================================ */
+:root {
+    --primary: #3b82f6;
+    --primary-hover: #2563eb;
+    --accent: #22c55e;
+    --danger: #ef4444;
+    --bg-primary: #0f172a;
+    --bg-secondary: #1e293b;
+    --bg-card: rgba(30, 41, 59, 0.8);
+    --text-primary: #f1f5f9;
+    --text-secondary: #94a3b8;
+    --border-color: rgba(148, 163, 184, 0.2);
+}
+
+[data-theme="light"] {
+    --bg-primary: #f8fafc;
+    --bg-secondary: #e2e8f0;
+    --bg-card: rgba(255, 255, 255, 0.9);
+    --text-primary: #1e293b;
+    --text-secondary: #64748b;
+    --border-color: rgba(100, 116, 139, 0.2);
+}
+
+/* ============================================
+   Base Styles
+   ============================================ */
+body {
+    background: linear-gradient(135deg, var(--bg-primary) 0%, var(--bg-secondary) 100%);
+    color: var(--text-primary);
+    min-height: 100vh;
+    font-family: 'Inter', system-ui, -apple-system, sans-serif;
+}
+
+/* ============================================
+   Component Utilities
+   ============================================ */
+@layer components {
+    .gradient-bg {
+        background: linear-gradient(135deg, var(--bg-primary) 0%, var(--bg-secondary) 100%);
+    }
+
+    .card-glass {
+        background: var(--bg-card);
+        backdrop-filter: blur(12px);
+        border: 1px solid var(--border-color);
+    }
+
+    .header-themed {
+        background: var(--bg-card);
+        border-color: var(--border-color);
+    }
+
+    .text-themed {
+        color: var(--text-primary);
+    }
+
+    .text-themed-secondary {
+        color: var(--text-secondary);
+    }
+
+    .text-themed-muted {
+        @apply text-slate-500 dark:text-slate-400;
+    }
+
+    .glass-card {
+        @apply card-glass;
+    }
+
+    .bg-themed-card-header {
+        background: var(--bg-secondary);
+    }
+
+    .border-themed-border {
+        border-color: var(--border-color);
+    }
+
+    /* Buttons */
+    .btn-primary {
+        @apply bg-blue-600 hover:bg-primary text-white px-4 py-2 rounded-lg flex items-center space-x-2 transition-all duration-200;
+    }
+
+    .btn-secondary {
+        @apply bg-slate-700 hover:bg-slate-600 dark:bg-slate-700 dark:hover:bg-slate-600 text-white px-4 py-2 rounded-lg transition-colors duration-200;
+    }
+
+    .btn-danger {
+        @apply bg-red-600 hover:bg-red-500 text-white px-4 py-2 rounded-lg transition-colors duration-200;
+    }
+
+    .btn-success {
+        @apply bg-accent hover:bg-green-600 text-white px-4 py-2 rounded-lg transition-colors duration-200;
+    }
+
+    /* Form Inputs */
+    .input-field {
+        @apply w-full rounded-lg px-4 py-3 focus:outline-none focus:border-primary transition-colors;
+        background-color: var(--bg-secondary);
+        border: 1px solid var(--border-color);
+        color: var(--text-primary);
+    }
+
+    .input-field-sm {
+        @apply w-full rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-primary transition-colors;
+        background-color: var(--bg-secondary);
+        border: 1px solid var(--border-color);
+        color: var(--text-primary);
+    }
+
+    /* Camera Card Styles */
+    .camera-card {
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .camera-card:hover {
+        transform: translateY(-4px);
+        box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+    }
+
+    .camera-card:hover .fullscreen-btn {
+        opacity: 1;
+    }
+
+    .fullscreen-btn {
+        opacity: 0.8;
+        transition: all 0.2s ease;
+    }
+}
+
+/* ============================================
+   Live Indicator Animation
+   ============================================ */
+.live-indicator {
+    animation: pulse-live 2s infinite;
+}
+
+@keyframes pulse-live {
+
+    0%,
+    100% {
+        opacity: 1;
+    }
+
+    50% {
+        opacity: 0.7;
+    }
+}
+
+.live-indicator span:first-child {
+    animation: blink 1s infinite;
+}
+
+@keyframes blink {
+
+    0%,
+    100% {
+        opacity: 1;
+    }
+
+    50% {
+        opacity: 0.3;
+    }
+}
+
+/* ============================================
+   Theme Toggle
+   ============================================ */
+.theme-toggle {
+    @apply relative w-14 h-7 rounded-full cursor-pointer transition-colors duration-300;
+    background: linear-gradient(135deg, #374151 0%, #1f2937 100%);
+}
+
+[data-theme="light"] .theme-toggle {
+    background: linear-gradient(135deg, #60a5fa 0%, #3b82f6 100%);
+}
+
+.theme-toggle-slider {
+    @apply absolute top-1 left-1 w-5 h-5 rounded-full flex items-center justify-center transition-transform duration-300;
+    background: linear-gradient(135deg, #fbbf24 0%, #f59e0b 100%);
+}
+
+[data-theme="light"] .theme-toggle-slider {
+    transform: translateX(28px);
+    background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
+}
+
+.theme-toggle svg {
+    @apply w-3 h-3;
+}
+
+.dark-icon {
+    color: #1f2937;
+}
+
+.light-icon {
+    color: #f59e0b;
+}
+
+/* ============================================
+   Fullscreen Modal
+   ============================================ */
+.fullscreen-modal {
+    display: none;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.fullscreen-modal.active {
+    display: flex;
+    opacity: 1;
+}
+
+/* ============================================
+   ROI Canvas Styles
+   ============================================ */
+.roi-image-wrapper {
+    position: relative;
+    display: inline-block;
+}
+
+.roi-canvas {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    cursor: crosshair;
+}
+
+/* ============================================
+   Loading Spinner
+   ============================================ */
+.spinner {
+    @apply w-12 h-12 border-4 border-primary border-t-transparent rounded-full;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    from {
+        transform: rotate(0deg);
+    }
+
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+/* ============================================
+   Modal Backdrop
+   ============================================ */
+.modal-backdrop {
+    @apply fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50;
+}
+
+.modal-content {
+    @apply card-glass rounded-2xl p-6 w-full max-w-lg mx-4;
+}
+
+/* ============================================
+   Scrollbar Styling
+   ============================================ */
+::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+}
+
+::-webkit-scrollbar-track {
+    background: var(--bg-secondary);
+}
+
+::-webkit-scrollbar-thumb {
+    background: var(--text-secondary);
+    border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: var(--text-primary);
+}
+@keyframes slide-in-right {
+    from {
+        transform: translateX(100%);
+        opacity: 0;
+    }
+    to {
+        transform: translateX(0);
+        opacity: 1;
+    }
+}
+
+.animate-slide-in-right {
+    animation: slide-in-right 0.3s ease-out forwards;
+}

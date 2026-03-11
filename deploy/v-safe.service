@@ -1,0 +1,33 @@
+[Unit]
+Description=V-Safe Person Detection Safety System
+After=network.target
+
+[Service]
+Type=simple
+User=vsafe
+Group=vsafe
+WorkingDirectory=/opt/v-safe/backend
+ExecStart=/opt/v-safe/venv/bin/python main.py
+Restart=on-failure
+RestartSec=5
+StandardOutput=journal
+StandardError=journal
+SyslogIdentifier=v-safe
+
+# Environment overrides (uncomment and adjust as needed)
+# Environment=VSAFE_PORT=8000
+# Environment=VSAFE_LOG_LEVEL=INFO
+# Environment=VSAFE_API_KEY=your-secret-key
+
+# Process limits
+LimitNOFILE=65536
+
+# Security hardening
+NoNewPrivileges=true
+ProtectSystem=strict
+ReadWritePaths=/opt/v-safe/backend/captures /opt/v-safe/backend/static
+ProtectHome=true
+PrivateTmp=true
+
+[Install]
+WantedBy=multi-user.target

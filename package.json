@@ -1,0 +1,12 @@
+{
+  "name": "safety-detection-system",
+  "version": "1.0.0",
+  "description": "YOLO26 NMS-Free Person Detection System",
+  "scripts": {
+    "build:css": "tailwindcss -i ./static/css/input.css -o ./static/css/styles.css --minify",
+    "watch:css": "tailwindcss -i ./static/css/input.css -o ./static/css/styles.css --watch"
+  },
+  "devDependencies": {
+    "tailwindcss": "^3.4.1"
+  }
+}
