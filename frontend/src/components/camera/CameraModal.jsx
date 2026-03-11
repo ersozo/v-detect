@@ -362,7 +362,7 @@ export default function CameraModal() {
 
             <div className="space-y-3 max-h-[450px] overflow-y-auto pr-2 custom-scrollbar">
               {(formData.plc_outputs || []).map((output, index) => (
-                <div key={index} className="p-3 bg-secondary/30 rounded-lg border border-border-color space-y-2">
+                <div key={index} className="p-3 rounded-lg border border-border-color space-y-2 bg-card">
                   <div className="flex items-center justify-between">
                     <label className="text-[10px] font-bold text-themed-secondary uppercase">Çıkış #{index + 1}</label>
                     <button
@@ -379,8 +379,8 @@ export default function CameraModal() {
                     </button>
                   </div>
 
-                  <div className="grid grid-cols-2 gap-2">
-                    <div className="col-span-2">
+                  <div className="grid grid-cols-3 gap-2">
+                    <div className="col-span-3">
                       <select
                         value={output.plc_id}
                         style={{ colorScheme: theme }}
@@ -399,7 +399,7 @@ export default function CameraModal() {
                       </select>
                     </div>
                     <div className="flex items-center space-x-1">
-                      <span className="text-[10px] text-themed-secondary">DB</span>
+                      <span className="text-[10px] text-themed-secondary whitespace-nowrap uppercase">DB NO</span>
                       <input
                         type="number"
                         value={output.db_number}
@@ -408,40 +408,41 @@ export default function CameraModal() {
                           newOutputs[index].db_number = parseInt(e.target.value);
                           setFormData(prev => ({ ...prev, plc_outputs: newOutputs }));
                         }}
-                        className="input-field-sm text-center"
+                        className="input-field-sm text-center w-full py-1"
                       />
                     </div>
                     <div className="flex items-center space-x-1">
-                      <span className="text-[10px] text-themed-secondary">B.b</span>
-                      <div className="flex items-center -space-x-px">
-                        <input
-                          type="number"
-                          value={output.byte_idx}
-                          onChange={(e) => {
-                            const newOutputs = [...formData.plc_outputs];
-                            newOutputs[index].byte_idx = parseInt(e.target.value);
-                            setFormData(prev => ({ ...prev, plc_outputs: newOutputs }));
-                          }}
-                          className="input-field-sm text-center rounded-r-none w-10"
-                        />
-                        <input
-                          type="number"
-                          min="0" max="7"
-                          value={output.bit_idx}
-                          onChange={(e) => {
-                            const newOutputs = [...formData.plc_outputs];
-                            newOutputs[index].bit_idx = parseInt(e.target.value);
-                            setFormData(prev => ({ ...prev, plc_outputs: newOutputs }));
-                          }}
-                          className="input-field-sm text-center rounded-l-none w-10"
-                        />
-                      </div>
+                      <span className="text-[10px] text-themed-secondary whitespace-nowrap">BYTE</span>
+                      <input
+                        type="number"
+                        value={output.byte_idx}
+                        onChange={(e) => {
+                          const newOutputs = [...formData.plc_outputs];
+                          newOutputs[index].byte_idx = parseInt(e.target.value);
+                          setFormData(prev => ({ ...prev, plc_outputs: newOutputs }));
+                        }}
+                        className="input-field-sm text-center w-full py-1"
+                      />
+                    </div>
+                    <div className="flex items-center space-x-1">
+                      <span className="text-[10px] text-themed-secondary whitespace-nowrap">BIT</span>
+                      <input
+                        type="number"
+                        min="0" max="7"
+                        value={output.bit_idx}
+                        onChange={(e) => {
+                          const newOutputs = [...formData.plc_outputs];
+                          newOutputs[index].bit_idx = parseInt(e.target.value);
+                          setFormData(prev => ({ ...prev, plc_outputs: newOutputs }));
+                        }}
+                        className="input-field-sm text-center w-full py-1"
+                      />
                     </div>
                   </div>
                 </div>
               ))}
               {(formData.plc_outputs || []).length === 0 && (
-                <div className="text-center py-8 border-2 border-dashed border-border-color rounded-lg opacity-50">
+                <div className="text-center py-8 border-2 border-dashed border-border-color rounded-lg bg-card">
                   <p className="text-xs italic">Sinyal çıkışı yok</p>
                 </div>
               )}
