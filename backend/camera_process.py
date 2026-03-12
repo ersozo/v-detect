@@ -19,6 +19,7 @@ from queue import Empty, Full
 
 import cv2
 import numpy as np
+from translations import translate_label
 
 # ---------------------------------------------------------------------------
 # Drawing helpers
@@ -80,9 +81,9 @@ def _draw_detections(
         cls_id = det.get("class_id", 0)
 
         if class_names and cls_id in class_names:
-            label = class_names[cls_id]
+            label = translate_label(class_names[cls_id])
         else:
-            label = f"ID:{cls_id}" if cls_id != 0 else "Person"
+            label = f"ID:{cls_id}" if cls_id != 0 else "Kişi"
 
         cv2.putText(
             frame,
@@ -328,15 +329,20 @@ class CameraProcess(multiprocessing.Process):
             frame_bytes = jpeg.tobytes()
 
             # --- publish (leaky queues — always latest, never backlog) ---
+            detected_objs = [d for d in last_detections if d["in_roi"]]
+            main_label = "Tespit"
+            if detected_objs and class_names:
+                cls_id = detected_objs[0].get("class_id", 0)
+                main_label = translate_label(class_names.get(cls_id, "Nesne"))
+
             _put_leaky(self.frame_queue, frame_bytes)
             _put_leaky(
                 self.event_queue,
                 {
                     "camera_id": self.camera_id,
                     "person_detected": last_detected,
-                    "count": sum(
-                        1 for d in last_detections if d["in_roi"]
-                    ),
+                    "count": len(detected_objs),
+                    "label": main_label,
                     "timestamp": time.time(),
                 },
             )

@@ -41,10 +41,10 @@ export default function NotificationToast({ alert, onDismiss }) {
           </div>
           <div className="ml-3 w-0 flex-1 pt-0.5">
             <p className="text-sm font-bold text-white uppercase tracking-wider">
-              {isEntry ? 'Nesne Bulundu' : 'Bölge Temizlendi'}
+              {isEntry ? `${alert.label || 'Nesne'} Tespit Edildi` : 'Bölge Temizlendi'}
             </p>
             <p className="mt-1 text-sm text-gray-300">
-              <span className="font-semibold text-white">{cameraName}</span>: {isEntry ? 'Nesne bulundu!' : 'Bölge temizlendi.'}
+              <span className="font-semibold text-white">{cameraName}</span>: {isEntry ? `${alert.label || 'Nesne'} tespit edildi!` : 'Bölge temizlendi.'}
             </p>
             {isEntry && (
               <div className="mt-2 flex">

@@ -32,6 +32,7 @@ class PLCManager:
         self._config: dict = {"instances": {}, "default_plc_id": None}
         self._event_queues: dict = {}  # camera_id → mp.Queue
         self._camera_states: dict[str, bool] = {}  # camera_id → person_detected
+        self._camera_labels: dict[str, str] = {}  # camera_id → last_label
         self._cameras: dict[str, dict] = {}  # camera_id → full config
         self._event_store: "EventStore | None" = None
         self._alert_callback = None
@@ -105,6 +106,8 @@ class PLCManager:
                         last_seen_person[camera_id] = time.time()
 
                     self._camera_states[camera_id] = new_raw_state
+                    if new_raw_state and event.get("label"):
+                        self._camera_labels[camera_id] = event.get("label")
 
                     if self._event_store:
                         loop = asyncio.get_running_loop()
@@ -138,7 +141,8 @@ class PLCManager:
                                 "camera_id": camera_id,
                                 "person_detected": smoothed_state,
                                 "timestamp": now,
-                                "count": 1 if smoothed_state else 0
+                                "count": 1 if smoothed_state else 0,
+                                "label": self._camera_labels.get(camera_id, "Nesne")
                             })
                         except Exception as e:
                             logger.error("Alert callback error: %s", e)

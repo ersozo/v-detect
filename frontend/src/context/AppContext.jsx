@@ -326,7 +326,7 @@ export function AppProvider({ children }) {
           // Continuously track the real detection status per camera
           setActiveAlerts(prev => ({
             ...prev,
-            [data.camera_id]: !!data.person_detected
+            [data.camera_id]: data.person_detected ? (data.label || 'Nesne') : false
           }));
 
           // Auto-remove after 6 seconds

@@ -15,28 +15,45 @@ export function useWebRTCStream(cameraId, enabled = true) {
   const [error, setError] = useState(null);
   const pcRef = useRef(null);
 
-  // Attach stream to video element whenever it changes or element becomes available
+  // Attach stream to video element whenever it changes
   useEffect(() => {
     const el = videoRef.current;
-    if (el && stream) {
+    if (!el || !stream) return;
+
+    // Avoid re-setting srcObject if it's already assigned (prevents "new load request" interruption)
+    if (el.srcObject !== stream) {
       el.srcObject = stream;
-
-      // Ensure muted and playsInline are set programmatically (more reliable)
-      el.muted = true;
-      el.playsInline = true;
-
-      const playPromise = el.play();
-      if (playPromise !== undefined) {
-        playPromise.catch(error => {
-          console.warn("WebRTC: Autoplay was prevented, waiting for user interaction:", error);
-        });
-      }
-
-      return () => {
-        // Cleanup if needed
-      };
     }
-  }, [stream, videoRef.current, cameraId]);
+
+    // Ensure muted and playsInline are set (required for autoplay in most browsers)
+    el.muted = true;
+    el.playsInline = true;
+
+    let isSubscribed = true;
+    const playVideo = async () => {
+      try {
+        await el.play();
+      } catch (err) {
+        if (!isSubscribed) return;
+        
+        if (err.name === 'AbortError') {
+          // This is often triggered by a new source being assigned; it's safe to ignore
+          // as the subsequent effect trigger will handle the new stream.
+        } else if (err.name === 'NotAllowedError') {
+          console.warn("WebRTC: Autoplay was prevented. Waiting for user interaction.");
+          // The browser usually allows play() if it's triggered by a user action.
+        } else {
+          console.error("WebRTC: Video play() failed:", err);
+        }
+      }
+    };
+
+    playVideo();
+
+    return () => {
+      isSubscribed = false;
+    };
+  }, [stream]);
 
   useEffect(() => {
     if (!cameraId || !enabled) {
@@ -52,7 +69,10 @@ export function useWebRTCStream(cameraId, enabled = true) {
     const resetWatchdog = () => {
       clearTimeout(watchdogTimer);
       watchdogTimer = setTimeout(() => {
-        if (active) setConnected(false);
+        if (active) {
+          setConnected(false);
+          setStream(null);
+        }
       }, 5000);
     };
 
@@ -79,10 +99,10 @@ export function useWebRTCStream(cameraId, enabled = true) {
         pc.onconnectionstatechange = () => {
           if (!active) return;
           if (pc.connectionState === 'connected') {
-            // We wait for ontrack to set connected=true for real data confirmation
             setError(null);
           } else if (pc.connectionState === 'failed' || pc.connectionState === 'closed' || pc.connectionState === 'disconnected') {
             setConnected(false);
+            setStream(null);
             clearTimeout(watchdogTimer);
           }
         };
@@ -137,6 +157,7 @@ export function useWebRTCStream(cameraId, enabled = true) {
         if (active) {
           setError(err.message);
           setConnected(false);
+          setStream(null);
         }
       }
     }
@@ -146,6 +167,7 @@ export function useWebRTCStream(cameraId, enabled = true) {
     return () => {
       active = false;
       clearTimeout(watchdogTimer);
+      setStream(null);
       if (pcRef.current) {
         pcRef.current.close();
         pcRef.current = null;
