@@ -160,3 +160,9 @@ class Detector:
 
     def set_confidence(self, confidence: float) -> None:
         self.confidence = max(0.1, min(1.0, confidence))
+
+    def get_names(self) -> dict[int, str]:
+        """Return class names map from the underlying YOLO model."""
+        if self._model is not None:
+            return self._model.names
+        return {0: "Person"}

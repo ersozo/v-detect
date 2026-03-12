@@ -291,7 +291,7 @@ export default function CameraModal() {
                   placeholder="örn: 0, 2, 7"
                 />
                 <p className="text-[10px] text-themed-secondary mt-1 italic">
-                  COCO: 0=İnsan, 2=Araba, 7=Kamyon
+                  COCO: 0=İnsan, 2=Araba, 15=Kedi
                 </p>
               </div>
 

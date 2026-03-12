@@ -63,7 +63,10 @@ def _draw_roi(frame: np.ndarray, polygon: np.ndarray,
 
 
 def _draw_detections(
-    frame: np.ndarray, detections: list[dict], blur_faces: bool = False
+    frame: np.ndarray,
+    detections: list[dict],
+    class_names: dict[int, str] | None = None,
+    blur_faces: bool = False,
 ) -> None:
     for det in detections:
         if not det["in_roi"]:
@@ -75,7 +78,12 @@ def _draw_detections(
 
         cv2.rectangle(frame, (x1, y1), (x2, y2), BBOX_COLOR, 6)
         cls_id = det.get("class_id", 0)
-        label = f"ID:{cls_id}" if cls_id != 0 else "Person"
+
+        if class_names and cls_id in class_names:
+            label = class_names[cls_id]
+        else:
+            label = f"ID:{cls_id}" if cls_id != 0 else "Person"
+
         cv2.putText(
             frame,
             f"{label} {det['confidence']:.2f}",
@@ -237,6 +245,7 @@ class CameraProcess(multiprocessing.Process):
         capture = RTSPCapture(self.rtsp_url)
         model_path = self.custom_model if self.custom_model else self.model_size
         detector = Detector(model_path, self.confidence)
+        class_names = detector.get_names()
 
         roi_polygon, roi_bbox = _compute_roi(self.roi)
         zone_data = _compute_zones(self.zones)
@@ -294,7 +303,7 @@ class CameraProcess(multiprocessing.Process):
 
             # --- annotate ---
             display = frame.copy()
-            _draw_detections(display, last_detections, self.blur_faces)
+            _draw_detections(display, last_detections, class_names, self.blur_faces)
             if zone_data:
                 for i, (zname, zsev, zpoly, _zbb) in enumerate(zone_data):
                     # Default color from list
