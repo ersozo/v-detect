@@ -190,7 +190,7 @@ export default function PlcConfigModal() {
         <div className="flex-1 flex flex-col overflow-hidden">
           <div className="flex-1 overflow-y-auto p-8 custom-scrollbar">
           {(selectedPlc || isAdding) ? (
-            <form onSubmit={handleSubmit} key={selectedPlcId || 'new'}>
+            <form onSubmit={handleSubmit} key={selectedPlcId || 'new'} autoComplete="off">
               <div className="space-y-4">
                 <div className="flex items-start justify-between bg-card p-4 rounded-xl border border-border-color border-l-4 border-l-accent">
                   <div className="flex-1 mr-4">
@@ -203,6 +203,7 @@ export default function PlcConfigModal() {
                       onChange={handleChange}
                       className="bg-transparent text-lg font-bold text-themed focus:outline-none w-full"
                       placeholder="örn. Ana Panel PLC"
+                      autoComplete="off"
                     />
                   </div>
                   <Toggle
@@ -240,7 +241,7 @@ export default function PlcConfigModal() {
                     <div className="space-y-3">
                       <div>
                         <label className="block text-xs font-bold text-themed-secondary mb-1 uppercase tracking-tight">PLC IP Adresi</label>
-                        <input type="text" name="ip" value={formData.ip} onChange={handleChange} className="input-field-sm" />
+                        <input type="text" name="ip" value={formData.ip} onChange={handleChange} className="input-field-sm" autoComplete="off" />
                       </div>
                       <div className="grid grid-cols-3 gap-2">
                         <div>

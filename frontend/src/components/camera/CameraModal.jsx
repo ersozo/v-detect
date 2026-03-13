@@ -145,7 +145,7 @@ export default function CameraModal() {
       wide={true}
       className="max-w-7xl"
     >
-      <form onSubmit={handleSubmit}>
+      <form onSubmit={handleSubmit} autoComplete="off">
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
           <div className="space-y-4">
             <h3 className="text-base font-semibold text-themed mb-3 flex items-center">
@@ -168,6 +168,7 @@ export default function CameraModal() {
                   onChange={handleChange}
                   className="input-field-sm"
                   placeholder="örn., Kapı Makinası 5. İstasyon"
+                  autoComplete="off"
                 />
               </div>
 
@@ -183,6 +184,7 @@ export default function CameraModal() {
                     onChange={handleChange}
                     className="input-field-sm"
                     placeholder="192.168.0.220"
+                    autoComplete="off"
                   />
                 </div>
                 <div>
@@ -207,6 +209,7 @@ export default function CameraModal() {
                     onChange={handleChange}
                     className="input-field-sm"
                     placeholder="admin"
+                    autoComplete="off"
                   />
                 </div>
                 <div>
@@ -218,6 +221,7 @@ export default function CameraModal() {
                     onChange={handleChange}
                     className="input-field-sm"
                     placeholder="••••••••"
+                    autoComplete="new-password"
                   />
                 </div>
               </div>
@@ -280,20 +284,38 @@ export default function CameraModal() {
                 />
               </div>
 
-              <div>
-                <label className="block text-sm font-medium text-themed-secondary mb-1">Algılanacak Sınıf ID'leri</label>
-                <input
-                  type="text"
-                  name="detect_classes"
-                  value={formData.detect_classes}
-                  onChange={handleChange}
-                  className="input-field-sm font-mono"
-                  placeholder="örn: 0, 2, 7"
-                />
-                <p className="text-[10px] text-themed-secondary mt-1 italic">
-                  COCO: 0=İnsan, 2=Araba, 15=Kedi
-                </p>
-              </div>
+               <div>
+                 <div className="flex items-center justify-between mb-1">
+                   <label className="block text-sm font-medium text-themed-secondary">Algılanacak Sınıf ID'leri</label>
+                   <div className="tooltip-trigger cursor-help">
+                     <svg className="w-4 h-4 text-accent hover:text-green-400 transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                     </svg>
+                     <div className="tooltip-content text-left">
+                       <span className="font-bold border-b border-border-color pb-1 mb-2 block text-[10px] uppercase tracking-wider">Yaygın Sınıflar</span>
+                       <ul className="space-y-1 text-[11px]">
+                         <li className="flex justify-between"><span>0: İnsan</span> <span className="text-themed-secondary">Person</span></li>
+                         <li className="flex justify-between"><span>1: Bisiklet</span> <span className="text-themed-secondary">Bicycle</span></li>
+                         <li className="flex justify-between"><span>2: Araba</span> <span className="text-themed-secondary">Car</span></li>
+                         <li className="flex justify-between"><span>3: Motosiklet</span> <span className="text-themed-secondary">Motorcycle</span></li>
+                         <li className="flex justify-between"><span>5: Otobüs</span> <span className="text-themed-secondary">Bus</span></li>
+                         <li className="flex justify-between"><span>7: Kamyon</span> <span className="text-themed-secondary">Truck</span></li>
+                         <li className="flex justify-between"><span>15: Kedi</span> <span className="text-themed-secondary">Cat</span></li>
+                         <li className="flex justify-between"><span>16: Köpek</span> <span className="text-themed-secondary">Dog</span></li>
+                       </ul>
+                     </div>
+                   </div>
+                 </div>
+                 <input
+                   type="text"
+                   name="detect_classes"
+                   value={formData.detect_classes}
+                   onChange={handleChange}
+                   className="input-field-sm font-mono"
+                   placeholder="örn: 0, 2, 7"
+                   autoComplete="off"
+                 />
+               </div>
 
               <div className="grid grid-cols-2 gap-3">
                 <div>
